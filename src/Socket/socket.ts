@@ -196,7 +196,12 @@ export const makeSocket = (config: SocketConfig) => {
 					ws.off('error', onErr)
 				},
 			)
-		} finally {
+		} 
+		catch(e)
+		{
+			logger.warn("Timeout → 'waitForMessage'")
+		}
+		finally {
 			ws.off(`TAG:${msgId}`, onRecv!)
 			ws.off('close', onErr!) // if the socket closes, you'll never receive the message
 			ws.off('error', onErr!)

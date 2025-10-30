@@ -41,10 +41,10 @@ const getImageProcessingLibrary = async() => {
 		return { sharp }
 	}
 
-	const jimp = _jimp?.default || _jimp
-	if(jimp) {
-		return { jimp }
-	}
+	// const jimp = _jimp?.default || _jimp
+	// if(jimp) {
+	// 	return { jimp }
+	// }
 
 	throw new Boom('No image processing library available')
 }
@@ -111,23 +111,25 @@ export const extractImageThumb = async(bufferOrFilePath: Readable | Buffer | str
 				height: dimensions.height,
 			},
 		}
-	} else if('jimp' in lib && typeof lib.jimp?.read === 'function') {
-		const { read, MIME_JPEG, RESIZE_BILINEAR, AUTO } = lib.jimp
+	} 
+	// else if('jimp' in lib && typeof lib.jimp?.read === 'function') {
+	// 	const { read, MIME_JPEG, RESIZE_BILINEAR, AUTO } = lib.jimp
 
-		const jimp = await read(bufferOrFilePath as string)
-		const dimensions = {
-			width: jimp.getWidth(),
-			height: jimp.getHeight()
-		}
-		const buffer = await jimp
-			.quality(50)
-			.resize(width, AUTO, RESIZE_BILINEAR)
-			.getBufferAsync(MIME_JPEG)
-		return {
-			buffer,
-			original: dimensions
-		}
-	} else {
+	// 	const jimp = await read(bufferOrFilePath as string)
+	// 	const dimensions = {
+	// 		width: jimp.getWidth(),
+	// 		height: jimp.getHeight()
+	// 	}
+	// 	const buffer = await jimp
+	// 		.quality(50)
+	// 		.resize(width, AUTO, RESIZE_BILINEAR)
+	// 		.getBufferAsync(MIME_JPEG)
+	// 	return {
+	// 		buffer,
+	// 		original: dimensions
+	// 	}
+	// } 
+	else {
 		throw new Boom('No image processing library available')
 	}
 }
@@ -160,17 +162,19 @@ export const generateProfilePicture = async(mediaUpload: WAMediaUpload) => {
 				quality: 50,
 			})
 			.toBuffer()
-	} else if('jimp' in lib && typeof lib.jimp?.read === 'function') {
-		const { read, MIME_JPEG, RESIZE_BILINEAR } = lib.jimp
-		const jimp = await read(bufferOrFilePath as string)
-		const min = Math.min(jimp.getWidth(), jimp.getHeight())
-		const cropped = jimp.crop(0, 0, min, min)
+	}
+	//  else if('jimp' in lib && typeof lib.jimp?.read === 'function') {
+	// 	const { read, MIME_JPEG, RESIZE_BILINEAR } = lib.jimp
+	// 	const jimp = await read(bufferOrFilePath as string)
+	// 	const min = Math.min(jimp.getWidth(), jimp.getHeight())
+	// 	const cropped = jimp.crop(0, 0, min, min)
 
-		img = cropped
-			.quality(50)
-			.resize(640, 640, RESIZE_BILINEAR)
-			.getBufferAsync(MIME_JPEG)
-	} else {
+	// 	img = cropped
+	// 		.quality(50)
+	// 		.resize(640, 640, RESIZE_BILINEAR)
+	// 		.getBufferAsync(MIME_JPEG)
+	// } 
+	else {
 		throw new Boom('No image processing library available')
 	}
 
